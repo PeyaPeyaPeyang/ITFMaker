@@ -34,6 +34,9 @@ function pickWordByLetter(wordlist, letter) {
     return null;
   }
   const matchedWords = allWords.filter((word) => startsWithLetter(word, letter));
+  if (matchedWords.length === 0) {
+    return null;
+  }
   return pickRandom(matchedWords);
 }
 
