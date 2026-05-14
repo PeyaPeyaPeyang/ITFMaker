@@ -6,12 +6,17 @@ const wordInputs = [
 const resultBox = document.getElementById("result");
 const rerollButton = document.getElementById("reroll");
 
-function pickRandom(values) {
-  return values[Math.floor(Math.random() * values.length)];
-}
-
 function buildWordPool(wordlist) {
   return [wordlist.nouns, wordlist.conjs, wordlist.advs, wordlist.verbs].flat();
+}
+
+function pickThreeWords(values) {
+  const shuffled = [...values];
+  for (let i = shuffled.length - 1; i > 0; i -= 1) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
+  }
+  return shuffled.slice(0, 3);
 }
 
 function renderWords(words) {
@@ -29,14 +34,24 @@ function renderWords(words) {
 }
 
 async function setup() {
-  const response = await fetch("/wordlist.json", { cache: "no-store" });
-  const wordlist = await response.json();
-  const pool = buildWordPool(wordlist);
+  try {
+    const response = await fetch("/wordlist.json");
+    if (!response.ok) {
+      throw new Error(`Failed to load wordlist.json: ${response.status}`);
+    }
 
-  const reroll = () => renderWords([pickRandom(pool), pickRandom(pool), pickRandom(pool)]);
+    const wordlist = await response.json();
+    const pool = buildWordPool(wordlist);
 
-  rerollButton.addEventListener("click", reroll);
-  reroll();
+    const reroll = () => renderWords(pickThreeWords(pool));
+
+    rerollButton.addEventListener("click", reroll);
+    reroll();
+  } catch (error) {
+    console.error(error);
+    rerollButton.disabled = true;
+    resultBox.textContent = "単語リストの読み込みに失敗しました。";
+  }
 }
 
 setup();

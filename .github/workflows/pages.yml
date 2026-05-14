@@ -2,7 +2,7 @@ name: Deploy static content to Pages
 
 on:
   push:
-    branches: ["main", "master", "copilot/initialize-repo-with-wtfpl-license"]
+    branches: ["main", "master"]
   workflow_dispatch:
 
 permissions:
