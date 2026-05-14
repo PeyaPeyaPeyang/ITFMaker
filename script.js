@@ -45,7 +45,7 @@ function pickThreeWords(wordlist) {
   const second = pickWordByLetter(wordlist, "T");
   const third = pickWordByLetter(wordlist, "F");
 
-  return [first, second, third].filter(Boolean);
+  return [first, second, third].filter((word) => word != null);
 }
 
 function renderWords(words) {
