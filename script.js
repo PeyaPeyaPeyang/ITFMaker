@@ -35,7 +35,7 @@ function renderWords(words) {
 
 async function setup() {
   try {
-    const response = await fetch("/wordlist.json");
+    const response = await fetch("./wordlist.json");
     if (!response.ok) {
       throw new Error(`Failed to load wordlist.json: ${response.status}`);
     }
