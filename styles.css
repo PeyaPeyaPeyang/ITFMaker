@@ -1,0 +1,47 @@
+:root {
+  color-scheme: light;
+}
+
+body {
+  margin: 0;
+  font-family: "Yu Gothic", "Hiragino Kaku Gothic ProN", "Meiryo", sans-serif;
+  background: #f8f9fb;
+  color: #111;
+}
+
+main {
+  max-width: 720px;
+  margin: 2rem auto;
+  padding: 1rem;
+}
+
+.controller {
+  display: grid;
+  gap: 0.75rem;
+}
+
+.controller input,
+.controller button {
+  font-size: 1rem;
+  padding: 0.75rem;
+}
+
+.controller button {
+  cursor: pointer;
+}
+
+.result-box {
+  margin-top: 1.25rem;
+  min-height: 7rem;
+  border: 1px solid #cfd7e3;
+  padding: 1rem;
+  background: #fff;
+}
+
+.result-line {
+  margin: 0.4rem 0;
+  color: aqua;
+  font-family: "Anton", "Yu Gothic", "MS Gothic", sans-serif;
+  font-size: 32pt;
+  font-weight: 400;
+}
