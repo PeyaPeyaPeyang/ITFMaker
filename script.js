@@ -117,20 +117,11 @@ function downloadResultImage(words) {
   context.textAlign = "left";
   context.textBaseline = "alphabetic";
 
-  context.fillStyle = PRIMARY_TEXT_COLOR;
-  context.font = TITLE_FONT;
-  context.fillText("ITF Maker", 80, 100);
-
   context.fillStyle = WORD_HIGHLIGHT_COLOR;
   context.font = WORD_FONT;
   normalizedWords.forEach((word, index) => {
     context.fillText(word, 80, 220 + index * 120);
   });
-
-  context.fillStyle = PRIMARY_TEXT_COLOR;
-  context.font = FOOTER_FONT;
-  context.fillText("#ITF", 80, 560);
-  context.fillText(SHARE_URL, 220, 560);
 
   const link = document.createElement("a");
   const timestamp = new Date().toISOString().replace(/[:.]/g, "-");
