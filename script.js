@@ -108,12 +108,19 @@ function renderWords(words) {
   });
 }
 
+function normalizeWords(words) {
+  return words
+    .map((word) => String(word).replace(/\s+/g, " ").trim())
+    .filter(Boolean);
+}
+
 function buildShareText(words) {
-  return `ITF Maker で\n「${words.join(" ")}」\nを生成しました！\n#ITF\n\n${SHARE_URL}`;
+  const normalizedWords = normalizeWords(words);
+  return `ITF Maker で\n「${normalizedWords.join(" ")}」\nを生成しました！\n#ITF\n\n${SHARE_URL}`;
 }
 
 function shareOnTwitter(words) {
-  if (words.length === 0) {
+  if (normalizeWords(words).length === 0) {
     return;
   }
 
@@ -123,7 +130,8 @@ function shareOnTwitter(words) {
 }
 
 function downloadResultImage(words) {
-  if (words.length === 0) {
+  const normalizedWords = normalizeWords(words);
+  if (normalizedWords.length === 0) {
     return;
   }
 
@@ -147,7 +155,7 @@ function downloadResultImage(words) {
 
   context.fillStyle = WORD_HIGHLIGHT_COLOR;
   context.font = WORD_FONT;
-  words.forEach((word, index) => {
+  normalizedWords.forEach((word, index) => {
     context.fillText(word, 80, 220 + index * 120);
   });
 
@@ -157,7 +165,8 @@ function downloadResultImage(words) {
   context.fillText(SHARE_URL, 220, 560);
 
   const link = document.createElement("a");
-  link.download = `itf-maker-${Date.now()}.png`;
+  const timestamp = new Date().toISOString().replace(/[:.]/g, "-");
+  link.download = `itf-maker-${timestamp}.png`;
   link.href = canvas.toDataURL("image/png");
   link.click();
 }
