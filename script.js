@@ -7,7 +7,7 @@ const resultBox = document.getElementById("result");
 const rerollButton = document.getElementById("reroll");
 
 function buildWordPool(wordlist) {
-  return [wordlist.nouns, wordlist.conjs, wordlist.advs, wordlist.verbs].flat();
+  return [wordlist.nouns, wordlist.conjs, wordlist.advs, wordlist.verbs, wordlist.others].flat();
 }
 
 function pickThreeWords(values) {
