@@ -138,6 +138,8 @@ function downloadResultImage(words) {
 
   context.fillStyle = IMAGE_BG_COLOR;
   context.fillRect(0, 0, canvas.width, canvas.height);
+  context.textAlign = "left";
+  context.textBaseline = "alphabetic";
 
   context.fillStyle = PRIMARY_TEXT_COLOR;
   context.font = TITLE_FONT;
