@@ -10,17 +10,73 @@ function buildWordPool(wordlist) {
   return [wordlist.nouns, wordlist.conjs, wordlist.advs, wordlist.verbs, wordlist.others].flat();
 }
 
-function pickThreeWords(values) {
-  const shuffled = [...values];
-  for (let i = shuffled.length - 1; i > 0; i -= 1) {
-    const j = Math.floor(Math.random() * (i + 1));
-    [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
+function pickRandom(values) {
+  if (values.length === 0) {
+    return null;
   }
-  const picked = shuffled.slice(0, 3);
-  while (picked.length < 3 && values.length > 0) {
-    picked.push(values[Math.floor(Math.random() * values.length)]);
+  return values[Math.floor(Math.random() * values.length)];
+}
+
+function listEntries(wordlist, categories) {
+  return categories.flatMap((category) =>
+    (wordlist[category] || []).map((word) => ({ word, category })),
+  );
+}
+
+function startsWithLetter(word, letter) {
+  return word.toUpperCase().startsWith(letter.toUpperCase());
+}
+
+function pickEntry(wordlist, primaryCategories, letter, fallbackCategories = []) {
+  const primaryEntries = listEntries(wordlist, primaryCategories);
+  const fallbackEntries = listEntries(wordlist, fallbackCategories);
+  const allEntries = listEntries(wordlist, ["nouns", "conjs", "advs", "verbs", "others"]);
+  const priorityGroups = [
+    primaryEntries.filter((entry) => startsWithLetter(entry.word, letter)),
+    fallbackEntries.filter((entry) => startsWithLetter(entry.word, letter)),
+    primaryEntries,
+    fallbackEntries,
+    allEntries,
+  ];
+
+  for (const group of priorityGroups) {
+    const picked = pickRandom(group);
+    if (picked) {
+      return picked;
+    }
   }
-  return picked;
+
+  return null;
+}
+
+function pickThreeWords(wordlist) {
+  const first = pickEntry(wordlist, ["nouns", "verbs"], "I");
+  if (!first) {
+    return [];
+  }
+
+  const second =
+    first.category === "nouns"
+      ? pickEntry(wordlist, ["others", "verbs"], "T", ["conjs"])
+      : pickEntry(wordlist, ["conjs"], "T", ["others", "verbs"]);
+  if (!second) {
+    return [first.word];
+  }
+
+  let third;
+  if (second.category === "conjs") {
+    third = pickEntry(wordlist, ["verbs"], "F", ["nouns", "others"]);
+  } else if (second.category === "others") {
+    third = pickEntry(wordlist, ["others", "nouns"], "F", ["verbs"]);
+  } else {
+    third = pickEntry(wordlist, ["nouns", "verbs", "others"], "F", ["conjs"]);
+  }
+
+  if (!third) {
+    return [first.word, second.word];
+  }
+
+  return [first.word, second.word, third.word];
 }
 
 function renderWords(words) {
@@ -46,8 +102,13 @@ async function setup() {
 
     const wordlist = await response.json();
     const pool = buildWordPool(wordlist);
-
-    const reroll = () => renderWords(pickThreeWords(pool));
+    const reroll = () => {
+      const words = pickThreeWords(wordlist);
+      while (words.length < 3 && pool.length > 0) {
+        words.push(pool[Math.floor(Math.random() * pool.length)]);
+      }
+      renderWords(words);
+    };
 
     rerollButton.addEventListener("click", reroll);
     reroll();
