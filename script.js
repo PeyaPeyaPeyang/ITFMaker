@@ -16,7 +16,11 @@ function pickThreeWords(values) {
     const j = Math.floor(Math.random() * (i + 1));
     [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
   }
-  return shuffled.slice(0, 3);
+  const picked = shuffled.slice(0, 3);
+  while (picked.length < 3 && values.length > 0) {
+    picked.push(values[Math.floor(Math.random() * values.length)]);
+  }
+  return picked;
 }
 
 function renderWords(words) {
@@ -50,7 +54,7 @@ async function setup() {
   } catch (error) {
     console.error(error);
     rerollButton.disabled = true;
-    resultBox.textContent = "単語リストの読み込みに失敗しました。";
+    resultBox.textContent = "単語リストの読み込みに失敗しました。ページを再読み込みしてください。";
   }
 }
 
