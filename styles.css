@@ -30,6 +30,12 @@ main {
   cursor: pointer;
 }
 
+.action-buttons {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.75rem;
+}
+
 .result-box {
   margin-top: 1.25rem;
   min-height: 7rem;
@@ -44,4 +50,10 @@ main {
   font-family: "Anton", "Yu Gothic", "MS Gothic", sans-serif;
   font-size: 32pt;
   font-weight: 400;
+}
+
+@media (max-width: 540px) {
+  .action-buttons {
+    grid-template-columns: 1fr;
+  }
 }

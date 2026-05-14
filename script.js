@@ -5,7 +5,20 @@ const wordInputs = [
 ];
 const resultBox = document.getElementById("result");
 const rerollButton = document.getElementById("reroll");
+const shareTwitterButton = document.getElementById("share-twitter");
+const downloadImageButton = document.getElementById("download-image");
 const ALL_CATEGORIES = ["nouns", "conjs", "advs", "verbs", "others"];
+const SHARE_URL = "https://peyapeyapeyang.github.io/ITFMaker/";
+const TWITTER_INTENT_BASE_URL = "https://twitter.com/intent/tweet";
+const CANVAS_WIDTH = 1200;
+const CANVAS_HEIGHT = 630;
+const IMAGE_BG_COLOR = "#ffffff";
+const PRIMARY_TEXT_COLOR = "#111111";
+const WORD_HIGHLIGHT_COLOR = "#00ffff";
+const TITLE_FONT = "bold 56px 'Anton', 'Yu Gothic', sans-serif";
+const WORD_FONT = "bold 78px 'Anton', 'Yu Gothic', sans-serif";
+const FOOTER_FONT = "36px 'Yu Gothic', sans-serif";
+let currentWords = [];
 
 function buildWordPool(wordlist) {
   return ALL_CATEGORIES.flatMap((category) => wordlist[category] || []);
@@ -49,6 +62,7 @@ function pickThreeWords(wordlist) {
 }
 
 function renderWords(words) {
+  currentWords = [...words];
   wordInputs.forEach((input, index) => {
     input.value = words[index];
   });
@@ -60,6 +74,69 @@ function renderWords(words) {
     line.textContent = word;
     resultBox.appendChild(line);
   });
+}
+
+function normalizeWords(words) {
+  return words
+    .map((word) => String(word).replace(/\s+/g, " ").trim())
+    .filter(Boolean);
+}
+
+function buildShareText(words) {
+  const normalizedWords = normalizeWords(words);
+  return `ITF Maker で\n「${normalizedWords.join(" ")}」\nを生成しました！\n#ITF\n\n${SHARE_URL}`;
+}
+
+function shareOnTwitter(words) {
+  if (normalizeWords(words).length === 0) {
+    return;
+  }
+
+  const shareText = buildShareText(words);
+  const intentUrl = `${TWITTER_INTENT_BASE_URL}?text=${encodeURIComponent(shareText)}`;
+  window.open(intentUrl, "_blank", "noopener,noreferrer");
+}
+
+function downloadResultImage(words) {
+  const normalizedWords = normalizeWords(words);
+  if (normalizedWords.length === 0) {
+    return;
+  }
+
+  const canvas = document.createElement("canvas");
+  canvas.width = CANVAS_WIDTH;
+  canvas.height = CANVAS_HEIGHT;
+  const context = canvas.getContext("2d");
+  if (!context) {
+    console.error("Failed to create canvas context for image download.");
+    return;
+  }
+
+  context.fillStyle = IMAGE_BG_COLOR;
+  context.fillRect(0, 0, canvas.width, canvas.height);
+  context.textAlign = "left";
+  context.textBaseline = "alphabetic";
+
+  context.fillStyle = PRIMARY_TEXT_COLOR;
+  context.font = TITLE_FONT;
+  context.fillText("ITF Maker", 80, 100);
+
+  context.fillStyle = WORD_HIGHLIGHT_COLOR;
+  context.font = WORD_FONT;
+  normalizedWords.forEach((word, index) => {
+    context.fillText(word, 80, 220 + index * 120);
+  });
+
+  context.fillStyle = PRIMARY_TEXT_COLOR;
+  context.font = FOOTER_FONT;
+  context.fillText("#ITF", 80, 560);
+  context.fillText(SHARE_URL, 220, 560);
+
+  const link = document.createElement("a");
+  const timestamp = new Date().toISOString().replace(/[:.]/g, "-");
+  link.download = `itf-maker-${timestamp}.png`;
+  link.href = canvas.toDataURL("image/png");
+  link.click();
 }
 
 async function setup() {
@@ -75,11 +152,15 @@ async function setup() {
     }
 
     const reroll = () => renderWords(pickThreeWords(wordlist));
+    shareTwitterButton.addEventListener("click", () => shareOnTwitter(currentWords));
+    downloadImageButton.addEventListener("click", () => downloadResultImage(currentWords));
     rerollButton.addEventListener("click", reroll);
     reroll();
   } catch (error) {
     console.error(error);
     rerollButton.disabled = true;
+    shareTwitterButton.disabled = true;
+    downloadImageButton.disabled = true;
     resultBox.textContent = "単語リストの読み込みに失敗しました。ページを再読み込みしてください。";
   }
 }
