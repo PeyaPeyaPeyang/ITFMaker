@@ -9,7 +9,7 @@ const shareTwitterButton = document.getElementById("share-twitter");
 const downloadImageButton = document.getElementById("download-image");
 const ALL_CATEGORIES = ["nouns", "conjs", "advs", "verbs", "others"];
 const SHARE_URL = "https://peyapeyapeyang.github.io/ITFMaker/";
-const TWEET_INTENT_BASE_URL = "https://x.com/intent/tweet";
+const X_INTENT_BASE_URL = "https://x.com/intent/tweet";
 const CANVAS_WIDTH = 1200;
 const CANVAS_HEIGHT = 630;
 const IMAGE_BG_COLOR = "#ffffff";
@@ -94,7 +94,7 @@ function pickThreeWords(wordlist) {
 }
 
 function renderWords(words) {
-  currentWords = words.filter(Boolean);
+  currentWords = [...words];
   wordInputs.forEach((input, index) => {
     input.value = words[index];
   });
@@ -118,7 +118,7 @@ function shareOnTwitter(words) {
   }
 
   const shareText = buildShareText(words);
-  const intentUrl = `${TWEET_INTENT_BASE_URL}?text=${encodeURIComponent(shareText)}`;
+  const intentUrl = `${X_INTENT_BASE_URL}?text=${encodeURIComponent(shareText)}`;
   window.open(intentUrl, "_blank", "noopener,noreferrer");
 }
 
@@ -132,6 +132,7 @@ function downloadResultImage(words) {
   canvas.height = CANVAS_HEIGHT;
   const context = canvas.getContext("2d");
   if (!context) {
+    console.error("Failed to create canvas context for image download.");
     return;
   }
 
