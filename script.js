@@ -12,7 +12,7 @@ const SHARE_URL = "https://peyapeyapeyang.github.io/ITFMaker/";
 const TWITTER_INTENT_BASE_URL = "https://twitter.com/intent/tweet";
 const CANVAS_WIDTH = 1200;
 const CANVAS_HEIGHT = 630;
-const IMAGE_BG_COLOR = "#ffffff";
+const IMAGE_TEXT_COLOR = "#ffffff";
 const PRIMARY_TEXT_COLOR = "#111111";
 const WORD_HIGHLIGHT_COLOR = "#54bad7";
 const TITLE_FONT = "bold 56px 'Anton', 'Yu Gothic', sans-serif";
@@ -61,14 +61,25 @@ function pickThreeWords(wordlist) {
   return [first, second, third].filter((word) => word != null);
 }
 
+function formatResultWords(words) {
+  return words.map((word, index) => {
+    const upperWord = String(word).toUpperCase();
+    if (index === 2 && startsWithLetter(upperWord, "F") && !upperWord.endsWith(".")) {
+      return `${upperWord}.`;
+    }
+    return upperWord;
+  });
+}
+
 function renderWords(words) {
-  currentWords = [...words];
+  const formattedWords = formatResultWords(words);
+  currentWords = [...formattedWords];
   wordInputs.forEach((input, index) => {
-    input.value = words[index];
+    input.value = formattedWords[index];
   });
 
   resultBox.innerHTML = "";
-  words.forEach((word) => {
+  formattedWords.forEach((word) => {
     const line = document.createElement("p");
     line.className = "result-line";
     line.textContent = word;
@@ -112,15 +123,16 @@ function downloadResultImage(words) {
     return;
   }
 
-  context.fillStyle = IMAGE_BG_COLOR;
+  context.fillStyle = WORD_HIGHLIGHT_COLOR;
   context.fillRect(0, 0, canvas.width, canvas.height);
   context.textAlign = "left";
-  context.textBaseline = "alphabetic";
+  context.textBaseline = "top";
 
-  context.fillStyle = WORD_HIGHLIGHT_COLOR;
+  context.fillStyle = IMAGE_TEXT_COLOR;
   context.font = WORD_FONT;
+  const lineHeight = 120;
   normalizedWords.forEach((word, index) => {
-    context.fillText(word, 80, 220 + index * 120);
+    context.fillText(word, 0, index * lineHeight);
   });
 
   const link = document.createElement("a");
