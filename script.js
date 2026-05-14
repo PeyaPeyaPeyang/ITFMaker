@@ -102,13 +102,12 @@ async function setup() {
     }
 
     const wordlist = await response.json();
-    const pool = buildWordPool(wordlist);
-    const reroll = () => renderWords(pickThreeWords(wordlist));
-
-    rerollButton.addEventListener("click", reroll);
-    if (pool.length === 0) {
+    if (buildWordPool(wordlist).length === 0) {
       throw new Error("Word pool is empty");
     }
+
+    const reroll = () => renderWords(pickThreeWords(wordlist));
+    rerollButton.addEventListener("click", reroll);
     reroll();
   } catch (error) {
     console.error(error);
