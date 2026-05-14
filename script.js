@@ -5,7 +5,11 @@ const wordInputs = [
 ];
 const resultBox = document.getElementById("result");
 const rerollButton = document.getElementById("reroll");
+const shareTwitterButton = document.getElementById("share-twitter");
+const downloadImageButton = document.getElementById("download-image");
 const ALL_CATEGORIES = ["nouns", "conjs", "advs", "verbs", "others"];
+const SHARE_URL = "https://peyapeyapeyang.github.io/ITFMaker/";
+let currentWords = [];
 
 function buildWordPool(wordlist) {
   return ALL_CATEGORIES.flatMap((category) => wordlist[category] || []);
@@ -81,6 +85,7 @@ function pickThreeWords(wordlist) {
 }
 
 function renderWords(words) {
+  currentWords = words.filter(Boolean);
   wordInputs.forEach((input, index) => {
     input.value = words[index];
   });
@@ -92,6 +97,57 @@ function renderWords(words) {
     line.textContent = word;
     resultBox.appendChild(line);
   });
+}
+
+function buildShareText(words) {
+  return `ITF Maker で\n「${words.join(" ")}」\nを生成しました！\n#ITF\n\n${SHARE_URL}`;
+}
+
+function shareOnTwitter(words) {
+  if (words.length === 0) {
+    return;
+  }
+
+  const shareText = buildShareText(words);
+  const intentUrl = `https://twitter.com/intent/tweet?text=${encodeURIComponent(shareText)}`;
+  window.open(intentUrl, "_blank", "noopener,noreferrer");
+}
+
+function downloadResultImage(words) {
+  if (words.length === 0) {
+    return;
+  }
+
+  const canvas = document.createElement("canvas");
+  canvas.width = 1200;
+  canvas.height = 630;
+  const context = canvas.getContext("2d");
+  if (!context) {
+    return;
+  }
+
+  context.fillStyle = "#ffffff";
+  context.fillRect(0, 0, canvas.width, canvas.height);
+
+  context.fillStyle = "#111111";
+  context.font = "bold 56px 'Anton', 'Yu Gothic', sans-serif";
+  context.fillText("ITF Maker", 80, 100);
+
+  context.fillStyle = "aqua";
+  context.font = "bold 78px 'Anton', 'Yu Gothic', sans-serif";
+  words.forEach((word, index) => {
+    context.fillText(word, 80, 220 + index * 120);
+  });
+
+  context.fillStyle = "#111111";
+  context.font = "36px 'Yu Gothic', sans-serif";
+  context.fillText("#ITF", 80, 560);
+  context.fillText(SHARE_URL, 220, 560);
+
+  const link = document.createElement("a");
+  link.download = `itf-maker-${Date.now()}.png`;
+  link.href = canvas.toDataURL("image/png");
+  link.click();
 }
 
 async function setup() {
@@ -107,11 +163,15 @@ async function setup() {
     }
 
     const reroll = () => renderWords(pickThreeWords(wordlist));
+    shareTwitterButton.addEventListener("click", () => shareOnTwitter(currentWords));
+    downloadImageButton.addEventListener("click", () => downloadResultImage(currentWords));
     rerollButton.addEventListener("click", reroll);
     reroll();
   } catch (error) {
     console.error(error);
     rerollButton.disabled = true;
+    shareTwitterButton.disabled = true;
+    downloadImageButton.disabled = true;
     resultBox.textContent = "単語リストの読み込みに失敗しました。ページを再読み込みしてください。";
   }
 }
