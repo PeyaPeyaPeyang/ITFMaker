@@ -9,6 +9,15 @@ const shareTwitterButton = document.getElementById("share-twitter");
 const downloadImageButton = document.getElementById("download-image");
 const ALL_CATEGORIES = ["nouns", "conjs", "advs", "verbs", "others"];
 const SHARE_URL = "https://peyapeyapeyang.github.io/ITFMaker/";
+const TWEET_INTENT_BASE_URL = "https://x.com/intent/tweet";
+const CANVAS_WIDTH = 1200;
+const CANVAS_HEIGHT = 630;
+const IMAGE_BG_COLOR = "#ffffff";
+const PRIMARY_TEXT_COLOR = "#111111";
+const WORD_HIGHLIGHT_COLOR = "#00ffff";
+const TITLE_FONT = "bold 56px 'Anton', 'Yu Gothic', sans-serif";
+const WORD_FONT = "bold 78px 'Anton', 'Yu Gothic', sans-serif";
+const FOOTER_FONT = "36px 'Yu Gothic', sans-serif";
 let currentWords = [];
 
 function buildWordPool(wordlist) {
@@ -109,7 +118,7 @@ function shareOnTwitter(words) {
   }
 
   const shareText = buildShareText(words);
-  const intentUrl = `https://twitter.com/intent/tweet?text=${encodeURIComponent(shareText)}`;
+  const intentUrl = `${TWEET_INTENT_BASE_URL}?text=${encodeURIComponent(shareText)}`;
   window.open(intentUrl, "_blank", "noopener,noreferrer");
 }
 
@@ -119,28 +128,28 @@ function downloadResultImage(words) {
   }
 
   const canvas = document.createElement("canvas");
-  canvas.width = 1200;
-  canvas.height = 630;
+  canvas.width = CANVAS_WIDTH;
+  canvas.height = CANVAS_HEIGHT;
   const context = canvas.getContext("2d");
   if (!context) {
     return;
   }
 
-  context.fillStyle = "#ffffff";
+  context.fillStyle = IMAGE_BG_COLOR;
   context.fillRect(0, 0, canvas.width, canvas.height);
 
-  context.fillStyle = "#111111";
-  context.font = "bold 56px 'Anton', 'Yu Gothic', sans-serif";
+  context.fillStyle = PRIMARY_TEXT_COLOR;
+  context.font = TITLE_FONT;
   context.fillText("ITF Maker", 80, 100);
 
-  context.fillStyle = "aqua";
-  context.font = "bold 78px 'Anton', 'Yu Gothic', sans-serif";
+  context.fillStyle = WORD_HIGHLIGHT_COLOR;
+  context.font = WORD_FONT;
   words.forEach((word, index) => {
     context.fillText(word, 80, 220 + index * 120);
   });
 
-  context.fillStyle = "#111111";
-  context.font = "36px 'Yu Gothic', sans-serif";
+  context.fillStyle = PRIMARY_TEXT_COLOR;
+  context.font = FOOTER_FONT;
   context.fillText("#ITF", 80, 560);
   context.fillText(SHARE_URL, 220, 560);
 
