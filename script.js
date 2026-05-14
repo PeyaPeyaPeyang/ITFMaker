@@ -5,9 +5,10 @@ const wordInputs = [
 ];
 const resultBox = document.getElementById("result");
 const rerollButton = document.getElementById("reroll");
+const ALL_CATEGORIES = ["nouns", "conjs", "advs", "verbs", "others"];
 
 function buildWordPool(wordlist) {
-  return [wordlist.nouns, wordlist.conjs, wordlist.advs, wordlist.verbs, wordlist.others].flat();
+  return ALL_CATEGORIES.flatMap((category) => wordlist[category] || []);
 }
 
 function pickRandom(values) {
@@ -30,7 +31,7 @@ function startsWithLetter(word, letter) {
 function pickEntry(wordlist, primaryCategories, letter, fallbackCategories = []) {
   const primaryEntries = listEntries(wordlist, primaryCategories);
   const fallbackEntries = listEntries(wordlist, fallbackCategories);
-  const allEntries = listEntries(wordlist, ["nouns", "conjs", "advs", "verbs", "others"]);
+  const allEntries = listEntries(wordlist, ALL_CATEGORIES);
   const priorityGroups = [
     primaryEntries.filter((entry) => startsWithLetter(entry.word, letter)),
     fallbackEntries.filter((entry) => startsWithLetter(entry.word, letter)),
@@ -102,15 +103,12 @@ async function setup() {
 
     const wordlist = await response.json();
     const pool = buildWordPool(wordlist);
-    const reroll = () => {
-      const words = pickThreeWords(wordlist);
-      while (words.length < 3 && pool.length > 0) {
-        words.push(pool[Math.floor(Math.random() * pool.length)]);
-      }
-      renderWords(words);
-    };
+    const reroll = () => renderWords(pickThreeWords(wordlist));
 
     rerollButton.addEventListener("click", reroll);
+    if (pool.length === 0) {
+      throw new Error("Word pool is empty");
+    }
     reroll();
   } catch (error) {
     console.error(error);
