@@ -30,6 +30,9 @@ function startsWithLetter(word, letter) {
 
 function pickWordByLetter(wordlist, letter) {
   const allWords = buildWordPool(wordlist);
+  if (allWords.length === 0) {
+    return null;
+  }
   const matchedWords = allWords.filter((word) => startsWithLetter(word, letter));
   return pickRandom(matchedWords.length > 0 ? matchedWords : allWords);
 }
