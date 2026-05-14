@@ -5,8 +5,8 @@
 body {
   margin: 0;
   font-family: "Yu Gothic", "Hiragino Kaku Gothic ProN", "Meiryo", sans-serif;
-  background: #111;
-  color: #f4f4f4;
+  background: #f8f9fb;
+  color: #111;
 }
 
 main {
@@ -33,14 +33,15 @@ main {
 .result-box {
   margin-top: 1.25rem;
   min-height: 7rem;
-  border: 1px solid #333;
+  border: 1px solid #cfd7e3;
   padding: 1rem;
-  background: #000;
+  background: #fff;
 }
 
 .result-line {
   margin: 0.4rem 0;
   color: aqua;
-  font-family: "Yu Gothic", "MS Gothic", sans-serif;
-  font-weight: 700;
+  font-family: "Anton", "Yu Gothic", "MS Gothic", sans-serif;
+  font-size: 32pt;
+  font-weight: 800;
 }
