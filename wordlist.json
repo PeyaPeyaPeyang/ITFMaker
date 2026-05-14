@@ -28,14 +28,14 @@
     "Intention",
     "Instinct",
     "Imagination",
-    "Trajectory",
-    "Tradition",
-    "Transformation",
-    "Treasure",
     "Theme",
     "Theory",
     "Theorem",
-    "Thesis"
+    "Thesis",
+    "Tradition",
+    "Trajectory",
+    "Transformation",
+    "Treasure"
   ],
   "conjs": [
     "Then",
