@@ -6,6 +6,8 @@
     "Frontier",
     "Foresight",
     "Fortune",
+    "Foundation",
+    "Focus",
     "Framework",
     "Fusion",
     "Flare",
@@ -17,6 +19,8 @@
     "Flux",
     "Idea",
     "Image",
+    "Identity",
+    "Infinity",
     "Innovation",
     "Insight",
     "Impulse",
@@ -27,12 +31,17 @@
     "Theme",
     "Theory",
     "Theorem",
-    "Thesis"
+    "Thesis",
+    "Tradition",
+    "Trajectory",
+    "Transformation",
+    "Treasure"
   ],
   "conjs": [
     "Then",
     "Therefore",
     "Thus",
+    "Therewith",
     "Thereafter",
     "Thereby",
     "Therein",
@@ -41,13 +50,15 @@
     "Till"
   ],
   "advs": [
+    "Intensely",
     "Truly",
     "Tightly",
     "Tenderly",
     "Finally",
     "Forward",
     "Fast",
-    "Frequently"
+    "Frequently",
+    "Fearlessly"
   ],
   "verbs": [
     "Imagine",
@@ -63,6 +74,9 @@
     "Intuit",
     "Innovate",
     "Idealize",
+    "Transform",
+    "Traverse",
+    "Transcend",
     "Forge",
     "Form",
     "Fuel",
@@ -75,6 +89,7 @@
     "Fathom"
   ],
   "others": [
+    "Into",
     "The",
     "Thee",
     "Them",
@@ -84,6 +99,7 @@
     "That",
     "There",
     "Thereof",
+    "Towards",
     "Futureward",
     "Further"
   ]
