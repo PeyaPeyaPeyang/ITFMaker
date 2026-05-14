@@ -9,7 +9,7 @@ const shareTwitterButton = document.getElementById("share-twitter");
 const downloadImageButton = document.getElementById("download-image");
 const ALL_CATEGORIES = ["nouns", "conjs", "advs", "verbs", "others"];
 const SHARE_URL = "https://peyapeyapeyang.github.io/ITFMaker/";
-const X_INTENT_BASE_URL = "https://x.com/intent/tweet";
+const TWITTER_INTENT_BASE_URL = "https://twitter.com/intent/tweet";
 const CANVAS_WIDTH = 1200;
 const CANVAS_HEIGHT = 630;
 const IMAGE_BG_COLOR = "#ffffff";
@@ -118,7 +118,7 @@ function shareOnTwitter(words) {
   }
 
   const shareText = buildShareText(words);
-  const intentUrl = `${X_INTENT_BASE_URL}?text=${encodeURIComponent(shareText)}`;
+  const intentUrl = `${TWITTER_INTENT_BASE_URL}?text=${encodeURIComponent(shareText)}`;
   window.open(intentUrl, "_blank", "noopener,noreferrer");
 }
 
