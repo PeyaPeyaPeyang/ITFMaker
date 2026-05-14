@@ -24,6 +24,10 @@
     "Intention",
     "Instinct",
     "Imagination",
+    "Theme",
+    "Theory",
+    "Theorem",
+    "Thesis",
     "Them"
   ],
   "conjs": [
@@ -48,7 +52,7 @@
   ],
   "verbs": [
     "Imagine",
-    "Imaginate",
+    "Improvise",
     "Ignite",
     "Invent",
     "Inspire",
@@ -74,17 +78,13 @@
   "others": [
     "The",
     "Thee",
-    "Then",
     "These",
     "Those",
     "This",
     "That",
     "There",
-    "Theme",
-    "Theory",
-    "Theorem",
-    "Thermal",
-    "Thesis",
+    "Thereof",
+    "Therein",
     "Futureward",
     "Further"
   ]
