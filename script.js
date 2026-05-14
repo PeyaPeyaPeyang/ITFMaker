@@ -28,56 +28,24 @@ function startsWithLetter(word, letter) {
   return word.toUpperCase().startsWith(letter.toUpperCase());
 }
 
-function pickEntry(wordlist, primaryCategories, letter, fallbackCategories = []) {
-  const primaryEntries = listEntries(wordlist, primaryCategories);
-  const fallbackEntries = listEntries(wordlist, fallbackCategories);
-  const allEntries = listEntries(wordlist, ALL_CATEGORIES);
-  const priorityGroups = [
-    primaryEntries.filter((entry) => startsWithLetter(entry.word, letter)),
-    fallbackEntries.filter((entry) => startsWithLetter(entry.word, letter)),
-    primaryEntries,
-    fallbackEntries,
-    allEntries,
-  ];
-
-  for (const group of priorityGroups) {
-    const picked = pickRandom(group);
-    if (picked) {
-      return picked;
-    }
+function pickWordByLetter(wordlist, letter) {
+  const allWords = buildWordPool(wordlist);
+  if (allWords.length === 0) {
+    return null;
   }
-
-  return null;
+  const matchedWords = allWords.filter((word) => startsWithLetter(word, letter));
+  if (matchedWords.length === 0) {
+    return null;
+  }
+  return pickRandom(matchedWords);
 }
 
 function pickThreeWords(wordlist) {
-  const first = pickEntry(wordlist, ["nouns", "verbs"], "I");
-  if (!first) {
-    return [];
-  }
+  const first = pickWordByLetter(wordlist, "I");
+  const second = pickWordByLetter(wordlist, "T");
+  const third = pickWordByLetter(wordlist, "F");
 
-  const second =
-    first.category === "nouns"
-      ? pickEntry(wordlist, ["others", "verbs"], "T", ["conjs"])
-      : pickEntry(wordlist, ["conjs"], "T", ["others", "verbs"]);
-  if (!second) {
-    return [first.word];
-  }
-
-  let third;
-  if (second.category === "conjs") {
-    third = pickEntry(wordlist, ["verbs"], "F", ["nouns", "others"]);
-  } else if (second.category === "others") {
-    third = pickEntry(wordlist, ["others", "nouns"], "F", ["verbs"]);
-  } else {
-    third = pickEntry(wordlist, ["nouns", "verbs", "others"], "F", ["conjs"]);
-  }
-
-  if (!third) {
-    return [first.word, second.word];
-  }
-
-  return [first.word, second.word, third.word];
+  return [first, second, third].filter((word) => word != null);
 }
 
 function renderWords(words) {
